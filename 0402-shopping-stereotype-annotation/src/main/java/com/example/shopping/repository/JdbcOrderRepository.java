@@ -1,7 +1,10 @@
 package com.example.shopping.repository;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.shopping.entity.Order;
 
+@Repository
 public class JdbcOrderRepository implements OrderRepository {
     @Override
     public void insert(Order order) {

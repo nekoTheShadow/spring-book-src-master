@@ -1,7 +1,10 @@
 package com.example.shopping.repository;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.shopping.entity.Product;
 
+@Repository
 public class JdbcProductRepository implements ProductRepository {
     @Override
     public Product selectById(String id) {
