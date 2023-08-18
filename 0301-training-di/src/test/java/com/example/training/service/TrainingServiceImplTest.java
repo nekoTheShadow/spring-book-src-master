@@ -6,11 +6,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.example.training.entity.Training;
+import com.example.training.repository.TrainingRepository;
 
 class TrainingServiceImplTest {
     @Test
     public void test_findAll() {
-        TrainingService trainingService = null;
+    	TrainingRepository trainingRepository = new MockTrainingRepository();
+        TrainingService trainingService = new TrainingServiceImpl(trainingRepository);
 
         List<Training> trainings = trainingService.findAll();
         // 結果の確認
