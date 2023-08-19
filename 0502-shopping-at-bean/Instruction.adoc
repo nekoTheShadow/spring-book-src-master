@@ -5,6 +5,7 @@
 
 === 手順
 . ShoppingApplicationクラスのmainメソッドを実行してみましょう。「No qualifying bean of type 'javax.sql.DataSource' available」というエラーが発生します。原因は何でしょうか？
+.. **(回答) JdbcOrderItemRepositoryのdataSourceにInjectionするBeanが定義されていない。**
 
 . ShoppingApplicationクラスに以下のソースコードを追加してもう一度実行してみましょう(ソースコードを張り付けた後、統合開発環境の機能を使ってimport文を補完してください)。上手く動くはずです。何が起こったか説明できますか？
 +
@@ -17,6 +18,7 @@
         return dataSource;
     }
 ----
+.. **(回答) JdbcOrderItemRepositoryのdataSourceにInjectionできるBeanが定義されたため、正常に稼働するようになった。**
 
 === オプション
 . ServiceとRepositoryのBean定義の手段を、@Beanメソッドに変更してみましょう。

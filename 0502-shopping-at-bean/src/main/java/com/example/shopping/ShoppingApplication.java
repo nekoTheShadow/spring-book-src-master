@@ -3,10 +3,16 @@ package com.example.shopping;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import com.example.shopping.entity.Order;
 import com.example.shopping.enumeration.PaymentMethod;
@@ -52,6 +58,14 @@ public class ShoppingApplication {
         Order order = orderService.placeOrder(orderInput, cartInput);
 
         System.out.println("注文確定処理が完了しました。注文ID=" + order.getId());
+    }
+    
+    @Bean
+    public DataSource dataSource() {
+        EmbeddedDatabase dataSource = new EmbeddedDatabaseBuilder()
+                .addScripts("schema.sql", "data.sql")
+                .setType(EmbeddedDatabaseType.H2).build();
+        return dataSource;
     }
 }
 
