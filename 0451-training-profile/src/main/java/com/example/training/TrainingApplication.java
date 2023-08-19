@@ -15,6 +15,7 @@ import com.example.training.service.TrainingService;
 public class TrainingApplication {
 
     public static void main(String[] args) {
+    	System.setProperty("spring.profiles.active", "production");
         ApplicationContext context = new AnnotationConfigApplicationContext(TrainingApplication.class);
         TrainingService trainingService = context.getBean(TrainingService.class);
 
