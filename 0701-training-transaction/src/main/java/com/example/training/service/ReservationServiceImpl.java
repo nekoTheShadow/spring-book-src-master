@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.training.entity.Reservation;
 import com.example.training.entity.StudentType;
@@ -28,6 +29,7 @@ public class ReservationServiceImpl implements  ReservationService {
 	}
 
 	@Override
+	@Transactional
 	public Reservation reserve(ReservationInput reservationInput) {
 		Training training = trainingRepository.selectById(reservationInput.getTrainingId());
 		training.setReserved(training.getReserved() + 1);
