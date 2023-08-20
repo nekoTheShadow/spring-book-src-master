@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import com.example.shopping.input.OrderInput;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -21,6 +20,8 @@ import com.example.shopping.entity.Order;
 import com.example.shopping.enumeration.PaymentMethod;
 import com.example.shopping.input.CartInput;
 import com.example.shopping.input.CartItemInput;
+import com.example.shopping.input.OrderInput;
+import com.example.shopping.repository.OrderRepository;
 import com.example.shopping.service.OrderService;
 
 import ch.qos.logback.classic.Level;
@@ -36,6 +37,11 @@ public class ShoppingApplication {
                 .addScripts("schema.sql", "data.sql")
                 .setType(EmbeddedDatabaseType.H2).build();
         return dataSource;
+    }
+    
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    	return new JdbcTemplate(dataSource);
     }
 
     public static void main(String[] args) {
@@ -74,6 +80,22 @@ public class ShoppingApplication {
         Order order = orderService.placeOrder(orderInput, cartInput);
 
         System.out.println("注文確定処理が完了しました。注文ID=" + order.getId());
+        
+        // オプション:
+        // JdbcOrderRepositoryクラスに、IDで検索してOrderオブジェクトを取得するメソッドを追加しましょう。
+        // 追加できたら、TrainingApplicationクラスのmainメソッド内で注文確定が完了した後に、
+        // JdbcOrderRepositoryクラスのBeanをDIコンテナから取得して、
+        // 追加したメソッドを使って登録された注文データが取得できるか確認しましょう。
+        OrderRepository orderRepository = context.getBean(OrderRepository.class);
+        Order confirmedOrder = orderRepository.findById(order.getId());
+        System.out.println("id                     : " + confirmedOrder.getId());
+        System.out.println("order_date_time        : " + confirmedOrder.getOrderDateTime());
+        System.out.println("billing_amount         : " + confirmedOrder.getBillingAmount());
+        System.out.println("customer_name          : " + confirmedOrder.getCustomerName());
+        System.out.println("customer_address       : " + confirmedOrder.getCustomerAddress());
+        System.out.println("customer_phone         : " + confirmedOrder.getCustomerPhone());
+        System.out.println("customer_email_address : " + confirmedOrder.getCustomerEmailAddress());
+        System.out.println("payment_method         : " + confirmedOrder.getPaymentMethod());
     }
 }
 

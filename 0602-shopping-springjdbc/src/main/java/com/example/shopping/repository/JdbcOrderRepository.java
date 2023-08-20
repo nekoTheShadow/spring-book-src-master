@@ -1,5 +1,6 @@
 package com.example.shopping.repository;
 
+import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,10 @@ public class JdbcOrderRepository implements OrderRepository {
                 order.getCustomerEmailAddress(),
                 order.getPaymentMethod().toString());
     }
+
+	@Override
+	public Order findById(String id) {
+		return jdbcTemplate.queryForObject("SELECT * FROM t_order WHERE id=?", new DataClassRowMapper<>(Order.class), id);
+		
+	}
 }

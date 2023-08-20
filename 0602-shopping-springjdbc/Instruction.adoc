@@ -5,6 +5,7 @@ JdbcTemplateクラスを使用していないプログラムを、JdbcTemplate�
 
 === 手順
 . TrainingApplicationクラスを実行してみましょう。「No qualifying bean of type 'org.springframework.jdbc.core.JdbcTemplate' available」というエラーが発生します。何が原因でしょうか？
+.. **(回答) JdbcOrderRepositoryのjdbcTemplateにInjectするBean定義がない**
 
 . 必要な対応を行って、もう一度TrainingApplicationクラスを実行してみましょう。上手く動くはずです。
 
