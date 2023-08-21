@@ -4,14 +4,24 @@ import java.io.Serializable;
 
 import com.example.shopping.enumeration.PaymentMethod;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 @SuppressWarnings("serial")
 public class OrderInput implements Serializable {
+	@NotBlank
     private String name;
 
+	@NotBlank
     private String address;
-
+	
+	@NotBlank
+	@Pattern(regexp = "0\\d{1,4}-\\d{1,4}-\\d{4}")
     private String phone;
-
+	
+	@NotBlank
+	@Email
     private String emailAddress;
 
     private PaymentMethod paymentMethod;
