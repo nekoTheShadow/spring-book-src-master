@@ -37,7 +37,7 @@
                     </td>
                 </tr>
             </table>
-            <div>
+            <div sec:authorize="hasRole('MANAGER')">
                 <input type="submit" value="更新"/>
             </div>
             <a th:href="@{/maintenance/product/display-list}">商品一覧に戻る</a>
