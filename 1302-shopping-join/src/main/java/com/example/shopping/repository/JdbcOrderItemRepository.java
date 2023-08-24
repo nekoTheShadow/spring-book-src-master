@@ -1,10 +1,14 @@
 package com.example.shopping.repository;
 
-import org.springframework.jdbc.core.DataClassRowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.shopping.entity.OrderItem;
+import com.example.shopping.entity.Product;
 
 @Repository
 public class JdbcOrderItemRepository implements OrderItemRepository {
@@ -32,6 +36,29 @@ public class JdbcOrderItemRepository implements OrderItemRepository {
               LEFT OUTER JOIN t_product p 
               ON i.product_id = p.id
             WHERE
-              i.id = ?""", new DataClassRowMapper<>(OrderItem.class), id);
+              i.id = ?""", new SelectByIdRowMapper(), id);
+    }
+    
+    private class SelectByIdRowMapper implements RowMapper<OrderItem> {
+
+		@Override
+		public OrderItem mapRow(ResultSet rs, int rowNum) throws SQLException {
+			OrderItem orderItem = new OrderItem();
+			orderItem.setId(rs.getString("i_id"));
+			orderItem.setOrderId(rs.getString("i_order_id"));
+			orderItem.setPriceAtOrder(rs.getInt("i_price_at_order"));
+			orderItem.setQuantity(rs.getInt("i_quantity"));
+			orderItem.setProductId(rs.getString("p_id"));
+			
+			Product product = new Product();
+			product.setId(rs.getString("p_id"));
+			product.setName(rs.getString("p_name"));
+			product.setPrice(rs.getInt("p_price"));
+			product.setStock(rs.getInt("p_stock"));
+			orderItem.setProduct(product);
+			
+			return orderItem;
+		}
+    	
     }
 }
