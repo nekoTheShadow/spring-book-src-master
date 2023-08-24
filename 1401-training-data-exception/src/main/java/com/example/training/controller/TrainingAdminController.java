@@ -2,7 +2,7 @@ package com.example.training.controller;
 
 import java.util.List;
 
-import com.example.training.input.TrainingAdminInput;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.training.entity.Training;
+import com.example.training.input.TrainingAdminInput;
 import com.example.training.service.TrainingAdminService;
 
 @Controller
@@ -53,7 +54,12 @@ public class TrainingAdminController {
 
 	@PostMapping(value = "/register", params = "register")
 	public String register(@Validated TrainingAdminInput trainingAdminInput, Model model) {
-        trainingAdminService.register(trainingAdminInput);
+		try {
+			trainingAdminService.register(trainingAdminInput);
+		} catch (DuplicateKeyException e) {
+			model.addAttribute("duplicateError", e);
+	    	return "admin/training/registrationForm";
+		}
         model.addAttribute("trainingId", trainingAdminInput.getId());
         return "admin/training/registrationCompletion";
 	}
