@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.training.entity.Reservation;
 import com.example.training.entity.StudentType;
@@ -72,12 +73,17 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/reserve", params = "reserve")
-    public String reserve(Model model) {
+    public String reserve(RedirectAttributes redirectAttributes) {
         ReservationInput reservationInput = reservationSession.getReservationInput();
         Reservation reservation = reservationService.reserve(reservationInput);
-        model.addAttribute("reservation", reservation);
+        redirectAttributes.addFlashAttribute("reservation", reservation);
         reservationSession.clearData();
-        return "reservation/reservationCompletion";
+        return "redirect:/reservation/completion";
+    }
+    
+    @GetMapping(value="/completion")
+    public String reservationCompletion() {
+    	return "reservation/reservationCompletion";
     }
 
     @ExceptionHandler(CapacityOverException.class)
