@@ -10,6 +10,6 @@ public interface TrainingAdminService {
 
 	Training findById(String trainingId);
 
-	void update(TrainingAdminInput trainingAdminInput, String userId);
+	void update(TrainingAdminInput trainingAdminInput);
 
 }

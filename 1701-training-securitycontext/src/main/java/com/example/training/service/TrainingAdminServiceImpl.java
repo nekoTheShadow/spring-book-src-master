@@ -33,8 +33,8 @@ public class TrainingAdminServiceImpl implements TrainingAdminService {
 	}
 
 	@Override
-	public void update(TrainingAdminInput trainingAdminInput, String userId) {
-        auditLogService.registerLog("研修更新", userId);
+	public void update(TrainingAdminInput trainingAdminInput) {
+        auditLogService.registerLog("研修更新");
         Training training = new Training();
         training.setId(trainingAdminInput.getId());
         training.setTitle(trainingAdminInput.getTitle());

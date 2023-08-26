@@ -3,6 +3,8 @@ package com.example.training.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +23,10 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
-    public void registerLog(String  functionName, String userId) {
-
+    public void registerLog(String  functionName) {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	String userId = authentication.getName();
+    	
         AuditLog auditLog = new AuditLog();
         auditLog.setId(UUID.randomUUID().toString());
         auditLog.setFunctionName(functionName);

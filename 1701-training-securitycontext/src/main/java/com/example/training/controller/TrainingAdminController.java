@@ -3,7 +3,6 @@ package com.example.training.controller;
 import java.util.List;
 
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,8 +62,8 @@ public class TrainingAdminController {
     }
 
     @PostMapping(value = "/update", params = "update")
-    public String update(@Validated TrainingAdminInput trainingAdminInput, Authentication authentication) {
-        trainingAdminService.update(trainingAdminInput, authentication.getName());
+    public String update(@Validated TrainingAdminInput trainingAdminInput) {
+        trainingAdminService.update(trainingAdminInput);
         return "admin/training/updateCompletion";
     }
 
