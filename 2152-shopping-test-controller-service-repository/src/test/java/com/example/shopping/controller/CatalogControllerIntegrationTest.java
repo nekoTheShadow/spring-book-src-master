@@ -32,5 +32,9 @@ class CatalogControllerIntegrationTest {
 
     }
 
-
+    @Test
+    void test_displayDetails() throws Exception {
+    	mockMvc.perform(get("/catalog/display-details").param("productId", "p02"))
+    		.andExpect(content().string(containsString("ノート")));
+    }
 }
