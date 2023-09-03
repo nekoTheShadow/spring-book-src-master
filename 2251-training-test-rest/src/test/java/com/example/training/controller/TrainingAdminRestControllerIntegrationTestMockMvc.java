@@ -34,4 +34,16 @@ class TrainingAdminRestControllerIntegrationTestMockMvc {
          ;
     }
 
+    @Test
+    void test_getTraining() throws Exception {
+        mockMvc.perform(get("/api/trainings/{id}", "t01"))
+        	.andExpect(status().isOk())
+        	.andExpect(jsonPath("$.id").value("t01"))
+        	.andExpect(jsonPath("$.title").value("ビジネスマナー研修"))
+            .andExpect(jsonPath("$.startDateTime").value("2021-08-01T09:30:00"))
+            .andExpect(jsonPath("$.endDateTime").value("2021-08-03T17:00:00"))
+            .andExpect(jsonPath("$.reserved").value("1"))
+            .andExpect(jsonPath("$.capacity").value("10"));
+        
+    }
 }

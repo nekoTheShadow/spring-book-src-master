@@ -1,13 +1,16 @@
 package com.example.training.controller;
 
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +90,48 @@ class TrainingAdminRestControllerTest {
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
         String json = objectMapper.readTree(responseBody).toPrettyString();
         System.out.println(json);
+    }
+    
+    @Test
+    void test_getTrainings() throws UnsupportedEncodingException, Exception {
+        Training training1 = new Training();
+        training1.setId("t01");
+        training1.setTitle("Java研修");
+        training1.setStartDateTime(LocalDateTime.of(2021, 12, 1, 9, 30));
+        training1.setEndDateTime(LocalDateTime.of(2021, 12, 3, 17, 0));
+        training1.setReserved(3);
+        training1.setCapacity(10);
+        
+        Training training2 = new Training();
+        training2.setId("t02");
+        training2.setTitle("Go研修");
+        training2.setStartDateTime(LocalDateTime.of(2022, 12, 1, 9, 30));
+        training2.setEndDateTime(LocalDateTime.of(2022, 12, 3, 17, 0));
+        training2.setReserved(4);
+        training2.setCapacity(20);
+        
+        doReturn(List.of(training1, training2)).when(trainingAdminService).findAll();
+    	
+    	String responseBody = mockMvc.perform(get("/api/trainings").accept(MediaType.APPLICATION_JSON))
+    		.andExpect(status().isOk())
+    		.andReturn()
+    		.getResponse()
+    		.getContentAsString(StandardCharsets.UTF_8);
+    	Training[] trainings = objectMapper.readValue(responseBody, Training[].class);
+    	
+		assertThat(trainings[0].getId()).isEqualTo("t01");
+		assertThat(trainings[0].getTitle()).isEqualTo("Java研修");
+		assertThat(trainings[0].getStartDateTime()).isEqualTo(LocalDateTime.of(2021, 12, 1, 9, 30));
+		assertThat(trainings[0].getEndDateTime()).isEqualTo(LocalDateTime.of(2021, 12, 3, 17, 0));
+		assertThat(trainings[0].getReserved()).isEqualTo(3);
+		assertThat(trainings[0].getCapacity()).isEqualTo(10);
+		
+		assertThat(trainings[1].getId()).isEqualTo("t02");
+		assertThat(trainings[1].getTitle()).isEqualTo("Go研修");
+		assertThat(trainings[1].getStartDateTime()).isEqualTo(LocalDateTime.of(2022, 12, 1, 9, 30));
+		assertThat(trainings[1].getEndDateTime()).isEqualTo(LocalDateTime.of(2022, 12, 3, 17, 0));
+		assertThat(trainings[1].getReserved()).isEqualTo(4);
+		assertThat(trainings[1].getCapacity()).isEqualTo(20);
     }
 
 }
