@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.training.config.SecurityConfig;
@@ -27,6 +28,7 @@ class TrainingAdminControllerSecurityTest {
     TrainingAdminSession trainingAdminSession;
 
     @Test
+    @WithMockUser(roles = "GUEST")
     void test_displayList_GUESTユーザはアクセスできない() throws Exception {
         mockMvc.perform(
                         get("/admin/training/display-list")
@@ -36,6 +38,7 @@ class TrainingAdminControllerSecurityTest {
     }
 
     @Test
+    @WithMockUser(roles = "STAFF")
     void test_displayList_STAFFユーザはアクセスできる() throws Exception {
         mockMvc.perform(
                         get("/admin/training/display-list")
@@ -45,6 +48,7 @@ class TrainingAdminControllerSecurityTest {
     }
 
     @Test
+    @WithMockUser(roles = "STAFF")
     void test_validateUpdateInput_STAFFユーザはアクセスできない() throws Exception {
         mockMvc.perform(
                         post("/admin/training/validate-update-input")
@@ -55,6 +59,7 @@ class TrainingAdminControllerSecurityTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void test_validateUpdateInput_ADMINユーザはアクセスできる() throws Exception {
         mockMvc.perform(
                         post("/admin/training/validate-update-input")
